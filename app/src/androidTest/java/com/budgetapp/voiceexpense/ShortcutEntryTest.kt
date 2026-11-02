@@ -39,6 +39,7 @@ class ShortcutEntryTest {
         database = Room.inMemoryDatabaseBuilder(app, AppDatabase::class.java).build()
         app.containerOverride = AppContainer(
             database = database,
+            themeSettings = testThemeSettings(app),
             createVoiceRecognizer = { FakeVoiceRecognizer() },
         )
     }

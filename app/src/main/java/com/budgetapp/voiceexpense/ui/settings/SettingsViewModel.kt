@@ -9,6 +9,8 @@ import com.budgetapp.voiceexpense.data.BudgetDao
 import com.budgetapp.voiceexpense.data.BudgetPeriod
 import com.budgetapp.voiceexpense.data.Settings
 import com.budgetapp.voiceexpense.data.SettingsDao
+import com.budgetapp.voiceexpense.data.ThemeMode
+import com.budgetapp.voiceexpense.data.ThemeSettings
 import com.budgetapp.voiceexpense.domain.centsToInput
 import com.budgetapp.voiceexpense.domain.parseAmountToCents
 import java.time.Clock
@@ -23,6 +25,7 @@ data class SettingsForm(
     val monthlyText: String = "",
     val monthlyInvalid: Boolean = false,
     val weekStart: DayOfWeek = DayOfWeek.MONDAY,
+    val theme: ThemeMode = ThemeMode.SYSTEM,
     val ready: Boolean = false,
     val finished: Boolean = false,
 )
@@ -30,6 +33,7 @@ data class SettingsForm(
 class SettingsViewModel(
     private val budgetDao: BudgetDao,
     private val settingsDao: SettingsDao,
+    private val themeSettings: ThemeSettings,
     private val clock: Clock,
     private val onDataChanged: () -> Unit = {},
 ) : ViewModel() {
@@ -49,6 +53,7 @@ class SettingsViewModel(
                 weeklyText = savedWeeklyCents?.let(::centsToInput).orEmpty(),
                 monthlyText = savedMonthlyCents?.let(::centsToInput).orEmpty(),
                 weekStart = settingsDao.observe().first()?.weekStartDay ?: DayOfWeek.MONDAY,
+                theme = themeSettings.mode.first(),
                 ready = true,
             )
         }
@@ -64,6 +69,12 @@ class SettingsViewModel(
 
     fun onWeekStartChange(day: DayOfWeek) {
         form = form.copy(weekStart = day)
+    }
+
+    /** Unlike the rest of the form, this applies straight away, so you see it before leaving. */
+    fun onThemeChange(mode: ThemeMode) {
+        form = form.copy(theme = mode)
+        viewModelScope.launch { themeSettings.setMode(mode) }
     }
 
     fun save() {

@@ -112,4 +112,8 @@
     <string name="week_starts_on">Week starts on</string>
     <string name="monday">Monday</string>
     <string name="sunday">Sunday</string>
+    <string name="theme">Theme</string>
+    <string name="theme_system">System</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
 </resources>

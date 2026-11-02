@@ -68,6 +68,7 @@ class QuickCaptureFlowTest {
     private fun launch(savedCardMillis: Long = 60_000) {
         app.containerOverride = AppContainer(
             database = database,
+            themeSettings = testThemeSettings(app),
             clock = Clock.fixed(now.atZone(zone).toInstant(), zone),
             createVoiceRecognizer = { recognizer },
             onDataChanged = { dataChanges.incrementAndGet() },

@@ -1,27 +1,40 @@
 package com.budgetapp.voiceexpense
 
+import android.graphics.Color
+import android.os.ParcelFileDescriptor
+import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsSelected
+import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isSelected
 import androidx.compose.ui.test.junit4.v2.createEmptyComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
 import androidx.room.Room
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
 import com.budgetapp.voiceexpense.data.AppDatabase
 import com.budgetapp.voiceexpense.data.Category
 import com.budgetapp.voiceexpense.data.Expense
+import com.budgetapp.voiceexpense.data.ThemeMode
+import com.budgetapp.voiceexpense.data.ThemeSettings
 import java.time.Clock
 import java.time.LocalDateTime
 import java.time.ZoneId
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -39,13 +52,16 @@ class AppFlowTest {
     private val app get() = ApplicationProvider.getApplicationContext<VoiceExpenseApp>()
 
     private lateinit var database: AppDatabase
+    private lateinit var themeSettings: ThemeSettings
     private var scenario: ActivityScenario<MainActivity>? = null
 
     @Before
     fun setUp() {
         database = Room.inMemoryDatabaseBuilder(app, AppDatabase::class.java).build()
+        themeSettings = testThemeSettings(app)
         app.containerOverride = AppContainer(
             database = database,
+            themeSettings = themeSettings,
             clock = Clock.fixed(now.atZone(zone).toInstant(), zone),
             createVoiceRecognizer = { FakeVoiceRecognizer() },
         )
@@ -77,6 +93,28 @@ class AppFlowTest {
         if (note.isNotEmpty()) compose.onNodeWithText("Note (optional)").performTextInput(note)
         compose.onNodeWithText("Save").performClick()
         waitFor("This week")
+    }
+
+    /** Reads the top corner of the screen, which is the app bar's surface colour in both themes. */
+    private fun isDrawnDark(): Boolean {
+        val screen = compose.onRoot().captureToImage().asAndroidBitmap()
+        return Color.luminance(screen.getPixel(4, 4)) < 0.5f
+    }
+
+    private fun shell(command: String): String {
+        val output = InstrumentationRegistry.getInstrumentation().uiAutomation.executeShellCommand(command)
+        return ParcelFileDescriptor.AutoCloseInputStream(output).use { it.readBytes().decodeToString() }
+    }
+
+    /** Runs [block] with the phone's own dark mode set, then puts it back as it was. */
+    private fun withPhoneDarkMode(dark: Boolean, block: () -> Unit) {
+        val before = shell("cmd uimode night").substringAfter("Night mode: ").trim()
+        shell("cmd uimode night ${if (dark) "yes" else "no"}")
+        try {
+            block()
+        } finally {
+            shell("cmd uimode night $before")
+        }
     }
 
     private fun setBudgets(weekly: String, monthly: String) {
@@ -192,6 +230,37 @@ class AppFlowTest {
         compose.onNodeWithText("Save").performClick()
 
         waitFor("Sun 1 Nov – Sat 7 Nov")
+    }
+
+    @Test
+    fun darkThemeAppliesStraightAwayAndIsKeptWithoutSaving() = withPhoneDarkMode(dark = false) {
+        launch()
+        compose.onNodeWithContentDescription("Budgets and settings").performClick()
+        waitFor("Theme")
+        compose.onNodeWithText("System").assertIsSelected()
+        assertFalse(isDrawnDark())
+
+        compose.onNodeWithText("Dark").performScrollTo().performClick()
+        compose.waitUntil(5_000) { isDrawnDark() }
+        assertEquals(ThemeMode.DARK, runBlocking { themeSettings.mode.first() })
+
+        compose.onNodeWithContentDescription("Back").performClick()
+        waitFor("This week")
+        assertTrue(isDrawnDark())
+    }
+
+    @Test
+    fun lightThemeStaysLightWhenThePhoneIsDark() = withPhoneDarkMode(dark = true) {
+        runBlocking { themeSettings.setMode(ThemeMode.LIGHT) }
+        launch()
+        waitFor("This week")
+        compose.waitUntil(5_000) { !isDrawnDark() }
+
+        compose.onNodeWithContentDescription("Budgets and settings").performClick()
+        waitFor("Theme")
+        compose.onNodeWithText("Light").assertIsSelected()
+        compose.onNodeWithText("System").performScrollTo().performClick()
+        compose.waitUntil(5_000) { isDrawnDark() }
     }
 
     @Test

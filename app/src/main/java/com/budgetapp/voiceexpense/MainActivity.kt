@@ -8,7 +8,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.budgetapp.voiceexpense.ui.AppNavHost
 import com.budgetapp.voiceexpense.ui.entryRoute
-import com.budgetapp.voiceexpense.ui.theme.VoiceExpenseTheme
+import com.budgetapp.voiceexpense.ui.theme.AppTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,7 +22,7 @@ class MainActivity : ComponentActivity() {
             else -> null
         }
         setContent {
-            VoiceExpenseTheme {
+            AppTheme(this) {
                 AppNavHost(openRoute = openRoute)
             }
         }

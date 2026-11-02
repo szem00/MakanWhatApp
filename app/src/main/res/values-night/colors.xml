@@ -1,8 +1,8 @@
 <resources>
-    <color name="widget_surface">#2A2A30</color>
-    <color name="widget_on_surface">#E4E1E9</color>
-    <color name="widget_on_surface_variant">#C7C5D0</color>
-    <color name="widget_accent">#B6C4FF</color>
-    <color name="widget_on_accent">#1E2D5C</color>
-    <color name="widget_error">#F2B8B5</color>
+    <color name="widget_surface">@color/widget_surface_dark</color>
+    <color name="widget_on_surface">@color/widget_on_surface_dark</color>
+    <color name="widget_on_surface_variant">@color/widget_on_surface_variant_dark</color>
+    <color name="widget_accent">@color/widget_accent_dark</color>
+    <color name="widget_on_accent">@color/widget_on_accent_dark</color>
+    <color name="widget_error">@color/widget_error_dark</color>
 </resources>

@@ -65,9 +65,12 @@ class ReadmeScreenshots {
 
     @Before
     fun setUp() {
+        // Skipping each test, not the class, lets the runner count them all as skipped.
+        assumeTrue(screenshotsAsked)
         database = Room.inMemoryDatabaseBuilder(app, AppDatabase::class.java).build()
         app.containerOverride = AppContainer(
             database = database,
+            themeSettings = testThemeSettings(app),
             clock = Clock.fixed(now.atZone(zone).toInstant(), zone),
             createVoiceRecognizer = { recognizer },
             onDataChanged = { refreshBudgetWidgets(app) },
@@ -78,6 +81,7 @@ class ReadmeScreenshots {
 
     @After
     fun tearDown() {
+        if (!screenshotsAsked) return
         scenario?.close()
         app.containerOverride = null
         database.close()
@@ -278,10 +282,13 @@ class ReadmeScreenshots {
 
         private fun demo(command: String) = shell("am broadcast -a com.android.systemui.demo -e command $command")
 
+        private val screenshotsAsked: Boolean
+            get() = InstrumentationRegistry.getArguments().getString("screenshots") == "true"
+
         @JvmStatic
         @BeforeClass
         fun enterDemoMode() {
-            assumeTrue(InstrumentationRegistry.getArguments().getString("screenshots") == "true")
+            if (!screenshotsAsked) return
             shell("mkdir -p $DIR")
             // A tidy status bar: a fixed clock, full signal and battery, no notification icons.
             shell("settings put global sysui_demo_allowed 1")

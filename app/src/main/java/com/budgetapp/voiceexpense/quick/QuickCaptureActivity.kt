@@ -8,7 +8,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.budgetapp.voiceexpense.MainActivity
 import com.budgetapp.voiceexpense.ui.quick.QuickCaptureScreen
-import com.budgetapp.voiceexpense.ui.theme.VoiceExpenseTheme
+import com.budgetapp.voiceexpense.ui.theme.AppTheme
 
 /**
  * The voice shortcut behind the widget: a card over whatever is on screen. The mic only works for
@@ -19,7 +19,7 @@ class QuickCaptureActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            VoiceExpenseTheme {
+            AppTheme(this) {
                 QuickCaptureScreen(
                     onClose = ::finish,
                     onEdit = { id ->

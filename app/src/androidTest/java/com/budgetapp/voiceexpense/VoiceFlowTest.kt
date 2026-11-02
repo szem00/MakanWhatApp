@@ -67,6 +67,7 @@ class VoiceFlowTest {
     private fun useRecognizer(fake: FakeVoiceRecognizer) {
         app.containerOverride = AppContainer(
             database = database,
+            themeSettings = testThemeSettings(app),
             clock = Clock.fixed(now.atZone(zone).toInstant(), zone),
             createVoiceRecognizer = { fake },
         )

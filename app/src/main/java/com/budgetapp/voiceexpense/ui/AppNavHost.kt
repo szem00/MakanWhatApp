@@ -95,6 +95,7 @@ object AppViewModels {
             SettingsViewModel(
                 database.budgetDao(),
                 database.settingsDao(),
+                container().themeSettings,
                 container().clock,
                 container().onDataChanged,
             )

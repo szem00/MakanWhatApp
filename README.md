@@ -21,7 +21,7 @@ A native Android app in Kotlin and Jetpack Compose. Your expenses stay on your p
 - **Weekly and monthly budgets.** See what you've spent, what's left and how much is safe to spend each day for the rest of the week.
 - **Trends.** Daily spending this week, 12 weeks against your budget, spending by category and the average cost of each meal.
 - **CSV export** of every expense, ready for Excel or Power BI.
-- **Light and dark themes**, coloured from your wallpaper on Android 12 and newer.
+- **Light, Dark or System theme**, chosen in settings, and the widget follows it. On Android 12 and newer the colours come from your wallpaper.
 
 ## A tour
 
@@ -54,7 +54,7 @@ A native Android app in Kotlin and Jetpack Compose. Your expenses stay on your p
   &nbsp;
   <img src="docs/images/trends-dark.png" width="260" alt="Trends in the dark theme">
   &nbsp;
-  <img src="docs/images/settings.png" width="260" alt="Budgets and settings: weekly budget $250, monthly budget $1300, week starts on Monday, and Add widget to home screen">
+  <img src="docs/images/settings.png" width="260" alt="Budgets and settings: weekly budget $250, monthly budget $1300, week starts on Monday, theme set to System, and Add widget to home screen">
 </p>
 
 <sub>All screenshots use made-up demo data.</sub>
@@ -128,14 +128,14 @@ To add the widget, long-press your home screen and pick **Widgets**, or tap **Ad
 .\gradlew.bat test
 ```
 
-This runs 67 unit tests covering the voice parser, money handling, budget periods, trends and CSV export.
+This runs 70 unit tests covering the voice parser, money handling, budget periods, trends, CSV export and the theme choice.
 
 ```powershell
 $env:ANDROID_SERIAL = 'emulator-5554'
 .\gradlew.bat connectedDebugAndroidTest
 ```
 
-This runs 58 on-device tests of every screen, the widget's quick capture and the database. They use an in-memory database and a fake speech recognizer, since an emulator can't hear you.
+This runs 60 on-device tests of every screen, the theme setting, the widget's quick capture and the database. They use an in-memory database and a fake speech recognizer, since an emulator can't hear you.
 
 > [!CAUTION]
 > `connectedDebugAndroidTest` uninstalls the app from every connected device when it finishes, which deletes its expenses. Run it on an emulator, and set `ANDROID_SERIAL` so it leaves a plugged-in phone alone.
@@ -169,6 +169,7 @@ The images in `docs/images` are resized to 540 pixels wide.
 
 - **Kotlin and Jetpack Compose** with Material 3. Navigation Compose moves between screens, and a small `AppContainer` passes dependencies around without a DI framework.
 - **Room** stores the data, with schemas exported to `app/schemas`. The database holds real spending, so any schema change needs a migration rather than a wipe.
+- **DataStore** keeps the theme choice outside the database, so adding it needed no migration. On Android 12 and newer the app passes the choice to the system, which applies it to the splash screen and status bar too.
 - **Money is stored in whole cents**, so totals never pick up rounding errors.
 - **Android's `SpeechRecognizer`** sits behind a small `VoiceRecognizer` interface, which tests replace with a fake.
 - **The widget** uses `RemoteViews`. Its mic opens `QuickCaptureActivity`, a see-through overlay with its own task, so logging an expense doesn't bring up the rest of the app.

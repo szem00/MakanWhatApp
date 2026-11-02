@@ -35,6 +35,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.budgetapp.voiceexpense.R
+import com.budgetapp.voiceexpense.data.ThemeMode
 import com.budgetapp.voiceexpense.ui.AppBarSaveButton
 import com.budgetapp.voiceexpense.ui.AppViewModels
 import com.budgetapp.voiceexpense.ui.PinnedSaveButton
@@ -45,6 +46,12 @@ import java.time.DayOfWeek
 private val WEEK_START_OPTIONS = listOf(
     DayOfWeek.MONDAY to R.string.monday,
     DayOfWeek.SUNDAY to R.string.sunday,
+)
+
+private val THEME_OPTIONS = listOf(
+    ThemeMode.SYSTEM to R.string.theme_system,
+    ThemeMode.LIGHT to R.string.theme_light,
+    ThemeMode.DARK to R.string.theme_dark,
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -107,26 +114,41 @@ fun SettingsScreen(
                 imeAction = ImeAction.Done,
                 onValueChange = viewModel::onMonthlyChange,
             )
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text(
-                    stringResource(R.string.week_starts_on),
-                    style = MaterialTheme.typography.titleSmall,
-                )
-                SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
-                    WEEK_START_OPTIONS.forEachIndexed { index, (day, label) ->
-                        SegmentedButton(
-                            selected = form.weekStart == day,
-                            onClick = { viewModel.onWeekStartChange(day) },
-                            shape = SegmentedButtonDefaults.itemShape(
-                                index = index,
-                                count = WEEK_START_OPTIONS.size,
-                            ),
-                            label = { Text(stringResource(label)) },
-                        )
-                    }
-                }
-            }
+            ChoiceRow(
+                title = stringResource(R.string.week_starts_on),
+                options = WEEK_START_OPTIONS,
+                selected = form.weekStart,
+                onSelect = viewModel::onWeekStartChange,
+            )
+            ChoiceRow(
+                title = stringResource(R.string.theme),
+                options = THEME_OPTIONS,
+                selected = form.theme,
+                onSelect = viewModel::onThemeChange,
+            )
             AddWidgetButton()
+        }
+    }
+}
+
+@Composable
+private fun <T> ChoiceRow(
+    title: String,
+    options: List<Pair<T, Int>>,
+    selected: T,
+    onSelect: (T) -> Unit,
+) {
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text(title, style = MaterialTheme.typography.titleSmall)
+        SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
+            options.forEachIndexed { index, (value, label) ->
+                SegmentedButton(
+                    selected = selected == value,
+                    onClick = { onSelect(value) },
+                    shape = SegmentedButtonDefaults.itemShape(index = index, count = options.size),
+                    label = { Text(stringResource(label)) },
+                )
+            }
         }
     }
 }

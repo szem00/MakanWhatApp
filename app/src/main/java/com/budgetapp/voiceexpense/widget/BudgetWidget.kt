@@ -13,6 +13,7 @@ import com.budgetapp.voiceexpense.R
 import com.budgetapp.voiceexpense.VoiceExpenseApp
 import com.budgetapp.voiceexpense.data.AppDatabase
 import com.budgetapp.voiceexpense.data.BudgetPeriod
+import com.budgetapp.voiceexpense.data.ThemeMode
 import com.budgetapp.voiceexpense.domain.PeriodSummary
 import com.budgetapp.voiceexpense.domain.daysLeftIncludingToday
 import com.budgetapp.voiceexpense.domain.formatMoney
@@ -62,11 +63,19 @@ private suspend fun renderWidgets(app: VoiceExpenseApp) {
     val ids = manager.getAppWidgetIds(ComponentName(app, BudgetWidgetProvider::class.java))
     if (ids.isEmpty()) return
     val status = loadWeekStatus(app.container.database, app.container.clock)
-    manager.updateAppWidget(ids, widgetViews(app, status))
+    val layout = widgetLayout(app.container.themeSettings.mode.first())
+    manager.updateAppWidget(ids, widgetViews(app, status, layout))
 }
 
-private fun widgetViews(context: Context, status: WeekStatus): RemoteViews =
-    RemoteViews(context.packageName, R.layout.widget_budget).apply {
+/** The home screen draws widgets in its own light or dark mode, so a fixed choice needs its own layout. */
+internal fun widgetLayout(mode: ThemeMode): Int = when (mode) {
+    ThemeMode.SYSTEM -> R.layout.widget_budget
+    ThemeMode.LIGHT -> R.layout.widget_budget_light
+    ThemeMode.DARK -> R.layout.widget_budget_dark
+}
+
+private fun widgetViews(context: Context, status: WeekStatus, layout: Int): RemoteViews =
+    RemoteViews(context.packageName, layout).apply {
         val summary = status.summary
         val remaining = summary.remainingCents
         val amountView = if (summary.isOverBudget) R.id.widget_amount_over else R.id.widget_amount

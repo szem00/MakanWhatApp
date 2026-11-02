@@ -54,6 +54,7 @@ class TrendsFlowTest {
         database = Room.inMemoryDatabaseBuilder(app, AppDatabase::class.java).build()
         app.containerOverride = AppContainer(
             database = database,
+            themeSettings = testThemeSettings(app),
             clock = Clock.fixed(now.atZone(zone).toInstant(), zone),
             createVoiceRecognizer = { FakeVoiceRecognizer() },
         )

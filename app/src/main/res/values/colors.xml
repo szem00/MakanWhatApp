@@ -1,9 +1,26 @@
 <resources>
     <color name="ic_launcher_background">#0F766E</color>
-    <color name="widget_surface">#F7F7FA</color>
-    <color name="widget_on_surface">#1B1B1F</color>
-    <color name="widget_on_surface_variant">#46464F</color>
-    <color name="widget_accent">#4D5C8A</color>
-    <color name="widget_on_accent">#FFFFFF</color>
-    <color name="widget_error">#B3261E</color>
+
+    <!-- The widget's System look, which values-night switches to the dark colours.
+         Its Light and Dark looks use the suffixed colours directly, whatever the phone's mode. -->
+    <color name="widget_surface">@color/widget_surface_light</color>
+    <color name="widget_on_surface">@color/widget_on_surface_light</color>
+    <color name="widget_on_surface_variant">@color/widget_on_surface_variant_light</color>
+    <color name="widget_accent">@color/widget_accent_light</color>
+    <color name="widget_on_accent">@color/widget_on_accent_light</color>
+    <color name="widget_error">@color/widget_error_light</color>
+
+    <color name="widget_surface_light">#F7F7FA</color>
+    <color name="widget_on_surface_light">#1B1B1F</color>
+    <color name="widget_on_surface_variant_light">#46464F</color>
+    <color name="widget_accent_light">#4D5C8A</color>
+    <color name="widget_on_accent_light">#FFFFFF</color>
+    <color name="widget_error_light">#B3261E</color>
+
+    <color name="widget_surface_dark">#2A2A30</color>
+    <color name="widget_on_surface_dark">#E4E1E9</color>
+    <color name="widget_on_surface_variant_dark">#C7C5D0</color>
+    <color name="widget_accent_dark">#B6C4FF</color>
+    <color name="widget_on_accent_dark">#1E2D5C</color>
+    <color name="widget_error_dark">#F2B8B5</color>
 </resources>
