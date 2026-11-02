@@ -1,0 +1,115 @@
+<resources>
+    <string name="app_name">Voice Expense Tracker</string>
+
+    <string name="back">Back</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+    <string name="ok">OK</string>
+    <string name="save">Save</string>
+
+    <string name="category_breakfast">Breakfast</string>
+    <string name="category_lunch">Lunch</string>
+    <string name="category_dinner">Dinner</string>
+    <string name="category_supper">Supper</string>
+    <string name="category_transport">Transport</string>
+    <string name="category_groceries">Groceries</string>
+    <string name="category_shopping">Shopping</string>
+    <string name="category_other">Other</string>
+
+    <string name="add_expense">Add expense</string>
+    <string name="all_expenses">All expenses</string>
+    <string name="budgets_and_settings">Budgets and settings</string>
+    <string name="this_week">This week</string>
+    <string name="today">Today</string>
+    <string name="nothing_today">Nothing logged today.</string>
+    <string name="spent">spent</string>
+    <string name="spent_of_budget">spent of %1$s</string>
+    <string name="amount_left">%1$s left</string>
+    <string name="amount_over">%1$s over budget</string>
+    <string name="set_budget">Set a budget</string>
+    <string name="safe_to_spend_per_day">Safe to spend: %1$s a day for %2$d days, including today</string>
+    <string name="safe_to_spend_today">Safe to spend today: %1$s</string>
+
+    <string name="edit_expense">Edit expense</string>
+    <string name="amount">Amount</string>
+    <string name="amount_error">Enter an amount above zero, like 5.50</string>
+    <string name="category">Category</string>
+    <string name="note">Note (optional)</string>
+    <string name="when_label">When</string>
+    <string name="pick_time">Set time</string>
+    <string name="delete_expense_title">Delete this expense?</string>
+    <string name="delete_expense_message">This can\'t be undone.</string>
+
+    <string name="speak">Speak</string>
+    <string name="log_by_voice">Log by voice</string>
+    <string name="voice_listening">Listening…</string>
+    <string name="voice_hint">Try “lunch chicken rice 5.50”</string>
+    <string name="voice_done">Done</string>
+    <string name="voice_keep_going">Keep going and say the price, or tap Done</string>
+    <string name="voice_not_heard">I didn\'t catch that.</string>
+    <string name="voice_no_internet">Voice couldn\'t connect. Check your internet and try again.</string>
+    <string name="voice_unavailable">Voice input isn\'t available on this phone.</string>
+    <string name="voice_other_error">Something went wrong with voice input.</string>
+    <string name="voice_needs_mic">Voice needs access to your microphone.</string>
+    <string name="allow_microphone">Allow microphone</string>
+    <string name="open_settings">Open settings</string>
+    <string name="try_again">Try again</string>
+    <string name="type_instead">Type it instead</string>
+    <string name="confirm_expense">Confirm expense</string>
+    <string name="heard">Heard: “%1$s”</string>
+    <string name="amount_not_heard">No amount heard. Type it here.</string>
+    <string name="say_again">Say it again</string>
+
+    <string name="quick_saved">Saved</string>
+    <string name="quick_saved_detail">%1$s · %2$s</string>
+    <string name="quick_undo">Undo</string>
+    <string name="quick_edit">Edit</string>
+    <string name="quick_removed">Expense removed</string>
+    <string name="quick_no_price">I didn\'t hear a price, so nothing was saved.</string>
+    <string name="quick_capture_section">Shortcuts</string>
+    <string name="add_widget">Add widget to home screen</string>
+
+    <string name="widget_description">Your week\'s budget and a mic to log an expense</string>
+    <string name="widget_left_this_week">%1$s left this week</string>
+    <string name="widget_over_this_week">%1$s over this week</string>
+    <string name="widget_spent_this_week">%1$s spent this week</string>
+    <string name="widget_safe_per_day">Safe to spend: %1$s a day</string>
+    <string name="widget_no_budget">Tap here to set a budget</string>
+    <string name="spent_of_budget_full">Spent %1$s of %2$s</string>
+    <string name="widget_preview_amount">$67.50 left this week</string>
+    <string name="widget_preview_detail">Safe to spend: $22.50 a day</string>
+
+    <string name="trends">Trends</string>
+    <string name="trends_last_12_weeks">Last 12 weeks</string>
+    <string name="trends_this_month">This month</string>
+    <string name="trends_12_weeks">12 weeks</string>
+    <string name="trends_show_numbers">Numbers</string>
+    <string name="trends_show_chart">Chart</string>
+    <string name="trends_readout">%1$s · %2$s</string>
+    <string name="trends_week_of">Week of %1$s</string>
+    <string name="trends_budget_label">Budget %1$s</string>
+    <string name="trends_by_category">By category</string>
+    <string name="trends_nothing_in_period">Nothing logged in this period.</string>
+    <string name="trends_average_per_meal">Average per meal</string>
+    <string name="trends_no_average">—</string>
+    <plurals name="trends_logged">
+        <item quantity="one">%d logged</item>
+        <item quantity="other">%d logged</item>
+    </plurals>
+    <string name="export_csv">Export all expenses as CSV</string>
+    <string name="export_failed">Couldn\'t save the file.</string>
+    <plurals name="export_done">
+        <item quantity="one">Exported %d expense</item>
+        <item quantity="other">Exported %d expenses</item>
+    </plurals>
+
+    <string name="yesterday">Yesterday</string>
+    <string name="no_expenses">No expenses yet.</string>
+
+    <string name="weekly_budget">Weekly budget</string>
+    <string name="monthly_budget">Monthly budget</string>
+    <string name="budget_help">Leave blank for no budget</string>
+    <string name="week_starts_on">Week starts on</string>
+    <string name="monday">Monday</string>
+    <string name="sunday">Sunday</string>
+</resources>

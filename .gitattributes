@@ -1,0 +1,7 @@
+# Keep line endings stable across Windows and everything else.
+* text=auto
+# The shell script breaks on CRLF, and the batch file expects it.
+gradlew text eol=lf
+*.bat text eol=crlf
+*.jar binary
+*.png binary
