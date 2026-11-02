@@ -13,13 +13,18 @@ import com.budgetapp.voiceexpense.domain.centsToInput
 import com.budgetapp.voiceexpense.domain.inferMealCategory
 import com.budgetapp.voiceexpense.domain.parseAmountToCents
 import com.budgetapp.voiceexpense.domain.parseVoiceExpense
+import com.budgetapp.voiceexpense.location.ExpenseLocations
 import java.time.Clock
+import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import kotlinx.coroutines.launch
 
 const val NEW_EXPENSE_ID = -1L
+
+/** How far an expense's time can be from now and still be tagged with where you are. */
+private val HERE_AND_NOW = Duration.ofHours(2)
 
 data class EntryForm(
     val amountText: String = "",
@@ -43,6 +48,7 @@ class EntryViewModel(
     /** What voice heard, which makes this form the confirm card. */
     val transcript: String? = null,
     private val onDataChanged: () -> Unit = {},
+    private val expenseLocations: ExpenseLocations? = null,
 ) : ViewModel() {
     val isNew = expenseId == NEW_EXPENSE_ID
     val today: LocalDate get() = LocalDate.now(clock)
@@ -54,6 +60,7 @@ class EntryViewModel(
         private set
 
     init {
+        if (isNew) expenseLocations?.prepare()
         if (!isNew) {
             viewModelScope.launch {
                 val expense = expenseDao.get(expenseId)
@@ -96,7 +103,7 @@ class EntryViewModel(
         viewModelScope.launch {
             val current = existing
             if (current == null) {
-                expenseDao.insert(
+                val id = expenseDao.insert(
                     Expense(
                         timestamp = timestamp,
                         amountCents = cents,
@@ -106,6 +113,10 @@ class EntryViewModel(
                         source = if (transcript == null) ExpenseSource.MANUAL else ExpenseSource.VOICE,
                     ),
                 )
+                // Where you are now says nothing about a meal logged long after.
+                if (Duration.between(timestamp, clock.instant()).abs() <= HERE_AND_NOW) {
+                    expenseLocations?.tag(id)
+                }
             } else {
                 expenseDao.update(
                     current.copy(

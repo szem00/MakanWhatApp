@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Voice Expense Tracker</string>
+    <string name="app_name">Eat What with What Money</string>
 
     <string name="back">Back</string>
     <string name="cancel">Cancel</string>
@@ -116,4 +116,45 @@
     <string name="theme_system">System</string>
     <string name="theme_light">Light</string>
     <string name="theme_dark">Dark</string>
+
+    <string name="meal_finder">Meal finder</string>
+    <string name="find_a_meal_nearby">Find a meal nearby</string>
+    <string name="meal_finder_per_meal">%1$s a meal</string>
+    <plurals name="meal_finder_left_for_meals">
+        <item quantity="one">%1$s left for %2$d meal this week</item>
+        <item quantity="other">%1$s left for %2$d meals this week</item>
+    </plurals>
+    <string name="meal_finder_left_no_meals">%1$s left this week</string>
+    <string name="meal_finder_no_budget">Set a weekly budget to see what each meal can cost.</string>
+    <string name="meal_finder_budget_used">This week\'s budget is used up.</string>
+    <string name="meal_finder_location_title">Find food near you</string>
+    <string name="meal_finder_location_body">The meal finder needs your location. Meals you log afterwards also remember where you ate, so they show up here.</string>
+    <string name="allow_location">Allow location</string>
+    <string name="meal_finder_locating">Finding where you are…</string>
+    <string name="meal_finder_no_location">Couldn\'t find where you are. Check that location is on.</string>
+    <string name="meal_finder_your_places">Your places within 2 km</string>
+    <string name="meal_finder_no_own_places">No meals logged within 2 km fit the budget yet.</string>
+    <string name="meal_finder_last_price">%1$s last time</string>
+    <plurals name="meal_finder_visits">
+        <item quantity="one">%d visit</item>
+        <item quantity="other">%d visits</item>
+    </plurals>
+    <string name="meal_finder_nearby">Nearby on Google Maps</string>
+    <string name="meal_finder_no_key">Add PLACES_API_KEY to local.properties to search Google Maps.</string>
+    <string name="meal_finder_searching">Searching Google Maps…</string>
+    <string name="meal_finder_search_failed">Couldn\'t search Google Maps. %1$s</string>
+    <string name="meal_finder_nothing_nearby">No restaurants or food courts within 2 km.</string>
+    <plurals name="meal_finder_hidden_over">
+        <item quantity="one">%1$d more place is over %2$s a meal.</item>
+        <item quantity="other">%1$d more places are over %2$s a meal.</item>
+    </plurals>
+    <string name="meal_finder_attribution">Results from Google Maps</string>
+    <string name="meal_finder_search_again">Search again</string>
+    <string name="meal_finder_no_price">No price info</string>
+    <string name="meal_finder_price_from">From %1$s</string>
+    <string name="price_free">Free</string>
+    <string name="price_inexpensive">Inexpensive</string>
+    <string name="price_moderate">Moderate</string>
+    <string name="price_expensive">Expensive</string>
+    <string name="price_very_expensive">Very expensive</string>
 </resources>

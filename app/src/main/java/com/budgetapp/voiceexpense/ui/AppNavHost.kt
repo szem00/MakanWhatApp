@@ -28,7 +28,10 @@ import com.budgetapp.voiceexpense.ui.entry.NEW_EXPENSE_ID
 import com.budgetapp.voiceexpense.ui.history.HistoryScreen
 import com.budgetapp.voiceexpense.ui.history.HistoryViewModel
 import com.budgetapp.voiceexpense.ui.home.HomeScreen
+import com.budgetapp.voiceexpense.location.hasLocationPermission
 import com.budgetapp.voiceexpense.ui.home.HomeViewModel
+import com.budgetapp.voiceexpense.ui.meals.MealFinderScreen
+import com.budgetapp.voiceexpense.ui.meals.MealFinderViewModel
 import com.budgetapp.voiceexpense.ui.quick.QuickCaptureViewModel
 import com.budgetapp.voiceexpense.ui.settings.SettingsScreen
 import com.budgetapp.voiceexpense.ui.settings.SettingsViewModel
@@ -43,6 +46,7 @@ private const val ROUTE_HISTORY = "history"
 private const val ROUTE_SETTINGS = "settings"
 private const val ROUTE_VOICE = "voice"
 private const val ROUTE_TRENDS = "trends"
+private const val ROUTE_MEAL_FINDER = "meals"
 private const val ARG_EXPENSE_ID = "expenseId"
 private const val ARG_TRANSCRIPT = "transcript"
 
@@ -65,6 +69,7 @@ object AppViewModels {
                 saved.get<Long>(ARG_EXPENSE_ID) ?: NEW_EXPENSE_ID,
                 saved.get<String>(ARG_TRANSCRIPT),
                 container().onDataChanged,
+                container().expenseLocations,
             )
         }
         initializer {
@@ -85,10 +90,21 @@ object AppViewModels {
                 container().clock,
                 container().onDataChanged,
                 container().savedCardMillis,
+                container().expenseLocations,
             )
         }
         initializer {
             HistoryViewModel(container().database.expenseDao(), container().clock)
+        }
+        initializer {
+            val app = this[APPLICATION_KEY] as VoiceExpenseApp
+            MealFinderViewModel(
+                container().database,
+                container().clock,
+                container().locationSource,
+                container().placesSource,
+                hasPermission = { hasLocationPermission(app) },
+            )
         }
         initializer {
             val database = container().database
@@ -149,7 +165,11 @@ fun AppNavHost(openRoute: String? = null) {
                 onOpenHistory = { nav.open(ROUTE_HISTORY) },
                 onOpenTrends = { nav.open(ROUTE_TRENDS) },
                 onOpenSettings = { nav.open(ROUTE_SETTINGS) },
+                onOpenMealFinder = { nav.open(ROUTE_MEAL_FINDER) },
             )
+        }
+        composable(ROUTE_MEAL_FINDER) {
+            MealFinderScreen(onBack = { nav.back() })
         }
         composable(ROUTE_TRENDS) {
             TrendsScreen(onBack = { nav.back() })

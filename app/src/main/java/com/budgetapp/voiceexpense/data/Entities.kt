@@ -25,6 +25,9 @@ data class Expense(
     val note: String = "",
     @ColumnInfo(name = "raw_transcript") val rawTranscript: String? = null,
     val source: ExpenseSource = ExpenseSource.MANUAL,
+    /** Where it was logged, when location was allowed. Added in database version 2. */
+    val latitude: Double? = null,
+    val longitude: Double? = null,
 )
 
 /** A null [category] is the overall budget for the period. */

@@ -4,14 +4,19 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -52,6 +57,7 @@ fun HomeScreen(
     onOpenHistory: () -> Unit,
     onOpenTrends: () -> Unit,
     onOpenSettings: () -> Unit,
+    onOpenMealFinder: () -> Unit,
     viewModel: HomeViewModel = viewModel(factory = AppViewModels.Factory),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -120,6 +126,7 @@ fun HomeScreen(
                 onOpenExpense = onOpenExpense,
                 onOpenHistory = onOpenHistory,
                 onOpenSettings = onOpenSettings,
+                onOpenMealFinder = onOpenMealFinder,
             )
         }
     }
@@ -133,6 +140,7 @@ private fun HomeContent(
     onOpenExpense: (Long) -> Unit,
     onOpenHistory: () -> Unit,
     onOpenSettings: () -> Unit,
+    onOpenMealFinder: () -> Unit,
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -158,6 +166,24 @@ private fun HomeContent(
                 footnote = null,
                 onSetBudget = onOpenSettings,
             )
+        }
+        // The fork's main feature gets a button rather than a fourth app bar icon, which would
+        // squeeze the app's long name onto two lines.
+        item {
+            FilledTonalButton(
+                onClick = onOpenMealFinder,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
+            ) {
+                Icon(
+                    painterResource(R.drawable.ic_restaurant),
+                    contentDescription = null,
+                    modifier = Modifier.size(ButtonDefaults.IconSize),
+                )
+                Spacer(Modifier.width(ButtonDefaults.IconSpacing))
+                Text(stringResource(R.string.find_a_meal_nearby))
+            }
         }
         item {
             Row(

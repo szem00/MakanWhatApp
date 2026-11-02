@@ -1,8 +1,15 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
     alias(libs.plugins.room)
+}
+
+// The Places API key lives in local.properties, which Git ignores.
+val localProperties = Properties().apply {
+    rootProject.file("local.properties").takeIf { it.exists() }?.inputStream()?.use(::load)
 }
 
 android {
@@ -32,6 +39,24 @@ android {
     }
 }
 
+// This fork's own settings, kept apart from the main app's so merging its changes stays easy.
+android {
+    defaultConfig {
+        // A separate app ID installs beside the main app instead of replacing it.
+        applicationIdSuffix = ".personal"
+        versionNameSuffix = "-personal"
+        buildConfigField(
+            "String",
+            "PLACES_API_KEY",
+            "\"${localProperties.getProperty("PLACES_API_KEY", "")}\"",
+        )
+    }
+
+    buildFeatures {
+        buildConfig = true
+    }
+}
+
 room {
     schemaDirectory("$projectDir/schemas")
 }
@@ -49,6 +74,8 @@ dependencies {
     ksp(libs.androidx.room.compiler)
 
     testImplementation(libs.junit)
+    // Android's own org.json only works on a device, so unit tests need the real library.
+    testImplementation(libs.org.json)
 
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)

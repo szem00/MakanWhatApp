@@ -17,6 +17,7 @@ import com.budgetapp.voiceexpense.data.AppDatabase
 import com.budgetapp.voiceexpense.data.Category
 import com.budgetapp.voiceexpense.data.Expense
 import com.budgetapp.voiceexpense.data.ExpenseSource
+import com.budgetapp.voiceexpense.domain.LatLng
 import com.budgetapp.voiceexpense.quick.QuickCaptureActivity
 import com.budgetapp.voiceexpense.voice.VoiceFailure
 import java.time.Clock
@@ -48,6 +49,7 @@ class QuickCaptureFlowTest {
     private val app get() = ApplicationProvider.getApplicationContext<VoiceExpenseApp>()
     private val recognizer = FakeVoiceRecognizer()
     private val dataChanges = AtomicInteger()
+    private val here = LatLng(1.2840, 103.8514)
 
     private lateinit var database: AppDatabase
     private lateinit var scenario: ActivityScenario<QuickCaptureActivity>
@@ -73,6 +75,7 @@ class QuickCaptureFlowTest {
             createVoiceRecognizer = { recognizer },
             onDataChanged = { dataChanges.incrementAndGet() },
             savedCardMillis = savedCardMillis,
+            locationSource = FakeLocationSource(here),
         )
         scenario = ActivityScenario.launch(Intent(app, QuickCaptureActivity::class.java))
         compose.waitUntil(5_000) { recognizer.isListening }
@@ -119,6 +122,18 @@ class QuickCaptureFlowTest {
         assertEquals("lunch chicken rice 5.50", saved.rawTranscript)
         assertEquals(ExpenseSource.VOICE, saved.source)
         assertEquals(now.atZone(zone).toInstant(), saved.timestamp)
+    }
+
+    @Test
+    fun aSavedExpenseRemembersWhereItWasLogged() {
+        launch()
+        recognizer.hear("lunch chicken rice 5.50")
+        waitUntilSavedCount(1)
+        compose.waitUntil(5_000) {
+            runBlocking { database.expenseDao().withLocation() }.singleOrNull()?.let {
+                it.latitude == here.latitude && it.longitude == here.longitude
+            } ?: false
+        }
     }
 
     @Test

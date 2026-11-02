@@ -39,6 +39,12 @@ interface ExpenseDao {
 
     @Delete
     suspend fun delete(expense: Expense)
+
+    @Query("UPDATE expenses SET latitude = :latitude, longitude = :longitude WHERE id = :id")
+    suspend fun setLocation(id: Long, latitude: Double, longitude: Double)
+
+    @Query("SELECT * FROM expenses WHERE latitude IS NOT NULL AND longitude IS NOT NULL ORDER BY timestamp DESC")
+    suspend fun withLocation(): List<Expense>
 }
 
 @Dao

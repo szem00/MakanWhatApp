@@ -13,6 +13,7 @@ androidxTestExtJunit = "1.3.0"
 androidxTestRunner = "1.7.0"
 androidxTestCore = "1.7.0"
 espresso = "3.7.0"
+orgJson = "20260814"
 
 [libraries]
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
@@ -33,6 +34,7 @@ androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version
 androidx-test-rules = { group = "androidx.test", name = "rules", version.ref = "androidxTestCore" }
 androidx-test-runner = { group = "androidx.test", name = "runner", version.ref = "androidxTestRunner" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
+org-json = { group = "org.json", name = "json", version.ref = "orgJson" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

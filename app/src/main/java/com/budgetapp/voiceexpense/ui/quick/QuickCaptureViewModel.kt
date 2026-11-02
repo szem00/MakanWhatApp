@@ -9,6 +9,7 @@ import com.budgetapp.voiceexpense.data.Expense
 import com.budgetapp.voiceexpense.data.ExpenseDao
 import com.budgetapp.voiceexpense.data.ExpenseSource
 import com.budgetapp.voiceexpense.domain.parseVoiceExpense
+import com.budgetapp.voiceexpense.location.ExpenseLocations
 import java.time.Clock
 import java.time.LocalTime
 import kotlinx.coroutines.Job
@@ -27,6 +28,7 @@ class QuickCaptureViewModel(
     private val clock: Clock,
     private val onDataChanged: () -> Unit,
     private val savedCardMillis: Long,
+    private val expenseLocations: ExpenseLocations? = null,
 ) : ViewModel() {
     var result by mutableStateOf<QuickResult?>(null)
         private set
@@ -37,6 +39,10 @@ class QuickCaptureViewModel(
     private var saving: Job? = null
     private var closeTimer: Job? = null
     private var undoing = false
+
+    init {
+        expenseLocations?.prepare()
+    }
 
     fun onHeard(transcript: String) {
         if (result != null) return
@@ -58,6 +64,7 @@ class QuickCaptureViewModel(
         result = QuickResult.Saved(expense)
         saving = viewModelScope.launch {
             val id = expenseDao.insert(expense)
+            expenseLocations?.tag(id)
             result = QuickResult.Saved(expense.copy(id = id))
             onDataChanged()
             if (!undoing) {
