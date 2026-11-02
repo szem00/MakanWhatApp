@@ -10,12 +10,15 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.security.MessageDigest
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
 
 interface PlacesSource {
-    /** Restaurants and food courts within [radiusMeters] of [center], nearest first. */
+    /** Restaurants and food courts within [radiusMeters] of [center], in no particular order. */
     suspend fun nearbyFood(center: LatLng, radiusMeters: Int): List<NearbyPlace>
 }
 
@@ -23,14 +26,19 @@ class PlacesException(message: String) : Exception(message)
 
 /**
  * Nearby Search from the Places API (New). Asking for price levels and ranges makes each call an
- * Enterprise one, which a solo user keeps within the free monthly allowance.
+ * Enterprise one, which a solo user keeps within the free monthly allowance. Each search of the
+ * meal finder makes two calls (see [SEARCHES]).
  */
 class PlacesApiClient(
     private val apiKey: String,
     private val packageName: String,
     private val certSha1: String?,
 ) : PlacesSource {
-    override suspend fun nearbyFood(center: LatLng, radiusMeters: Int): List<NearbyPlace> =
+    override suspend fun nearbyFood(center: LatLng, radiusMeters: Int): List<NearbyPlace> = coroutineScope {
+        SEARCHES.map { types -> async { search(center, radiusMeters, types) } }.awaitAll().let(::mergeNearby)
+    }
+
+    private suspend fun search(center: LatLng, radiusMeters: Int, types: List<String>): List<NearbyPlace> =
         withContext(Dispatchers.IO) {
             val connection = (URL(NEARBY_SEARCH_URL).openConnection() as HttpURLConnection).apply {
                 requestMethod = "POST"
@@ -46,7 +54,7 @@ class PlacesApiClient(
             }
             try {
                 connection.outputStream.use {
-                    it.write(nearbyRequestBody(center, radiusMeters).toByteArray(Charsets.UTF_8))
+                    it.write(nearbyRequestBody(center, radiusMeters, types).toByteArray(Charsets.UTF_8))
                 }
                 val code = connection.responseCode
                 val stream = if (code in 200..299) connection.inputStream else connection.errorStream
@@ -71,10 +79,22 @@ class PlacesApiClient(
     }
 }
 
-private val FOOD_TYPES = listOf("restaurant", "food_court")
+/**
+ * Each search returns at most 20 places, nearest first. In a city centre the first search's 20 are
+ * all within a block, so the second looks for food courts alone, which Google also uses for hawker
+ * stalls. That reaches the hawker centres a few minutes' walk away, where the cheap meals are.
+ */
+internal val SEARCHES = listOf(
+    listOf("restaurant", "food_court"),
+    listOf("food_court"),
+)
 
-internal fun nearbyRequestBody(center: LatLng, radiusMeters: Int): String = JSONObject()
-    .put("includedTypes", JSONArray(FOOD_TYPES))
+/** One list from both searches, without the places they both found. */
+internal fun mergeNearby(searches: List<List<NearbyPlace>>): List<NearbyPlace> =
+    searches.flatten().distinctBy { it.id.ifEmpty { "${it.name} ${it.location}" } }
+
+internal fun nearbyRequestBody(center: LatLng, radiusMeters: Int, types: List<String>): String = JSONObject()
+    .put("includedTypes", JSONArray(types))
     .put("maxResultCount", 20)
     .put("rankPreference", "DISTANCE")
     .put(

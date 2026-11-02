@@ -10,6 +10,8 @@ Tap **Find a meal nearby** on the home screen. The meal finder shows:
 - **Your places within 2 km:** meals you've logged nearby whose last price fits that budget. Each new expense remembers where it was logged, once you allow location.
 - **Nearby on Google Maps:** restaurants and food courts within 2 km from the Places API (New), nearest first. Places priced over a meal's budget are left out. Places with no price data, which includes many hawker stalls, stay in.
 
+Google returns at most 20 places per search. In a city centre the nearest 20 restaurants can all be in one block, so the meal finder runs a second search for food courts alone, which Google also uses for hawker stalls. That brings in the hawker centres a few minutes' walk away.
+
 Tap any place for walking directions in Google Maps.
 
 Unlike the main app, this fork has internet and location permissions, and its database is at version 2, which adds a location to each expense.
@@ -22,7 +24,7 @@ Without a key, the meal finder still shows your own places.
 2. Create an API key, then restrict it:
    - **Application restrictions:** Android apps, package `com.budgetapp.voiceexpense.personal`, plus the SHA-1 of the key that signs your builds. For the debug key on this PC that's `CD:FD:D9:E5:1C:D7:B8:68:A3:D8:59:3E:92:04:9B:B8:C2:4D:9A:3E`.
    - **API restrictions:** Places API (New) only.
-3. Keep it free. Each search asks for prices, which makes it an Enterprise call. Solo use stays inside the free monthly allowance. Under **Quotas**, cap Nearby Search at about 30 requests a day, and set a US$1 budget alert under **Billing**.
+3. Keep it free. Each request asks for prices, which makes it an Enterprise call, and each meal finder search makes two requests. Solo use stays inside the free monthly allowance. Under **Quotas**, cap Nearby Search at about 30 requests a day, which allows 15 searches. Also set a US$1 budget alert under **Billing**.
 4. Add the key to `local.properties` in the project folder, which Git ignores, then rebuild:
 
    ```properties

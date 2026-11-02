@@ -1,6 +1,7 @@
 package com.budgetapp.voiceexpense.places
 
 import com.budgetapp.voiceexpense.domain.LatLng
+import com.budgetapp.voiceexpense.domain.NearbyPlace
 import com.budgetapp.voiceexpense.domain.PriceLevel
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
@@ -10,8 +11,10 @@ import org.junit.Test
 
 class PlacesResponseTest {
     @Test
-    fun requestAsksForFoodPlacesWithinTheRadiusNearestFirst() {
-        val body = JSONObject(nearbyRequestBody(LatLng(1.284, 103.8514), radiusMeters = 2_000))
+    fun requestAsksForTheGivenTypesWithinTheRadiusNearestFirst() {
+        val body = JSONObject(
+            nearbyRequestBody(LatLng(1.284, 103.8514), radiusMeters = 2_000, types = listOf("restaurant", "food_court")),
+        )
         assertEquals(listOf("restaurant", "food_court"), body.getJSONArray("includedTypes").toList())
         assertEquals("DISTANCE", body.getString("rankPreference"))
         assertEquals(20, body.getInt("maxResultCount"))
@@ -81,6 +84,31 @@ class PlacesResponseTest {
             ]}""",
         )
         assertEquals(listOf("Kept"), places.map { it.name })
+    }
+
+    @Test
+    fun theSecondSearchIsForFoodCourtsAlone() {
+        assertEquals(listOf(listOf("restaurant", "food_court"), listOf("food_court")), SEARCHES)
+    }
+
+    private fun place(id: String, name: String = id) =
+        NearbyPlace(id, name, null, LatLng(1.284, 103.8514), null, null, null, null)
+
+    @Test
+    fun placesBothSearchesFoundAppearOnce() {
+        val merged = mergeNearby(
+            listOf(
+                listOf(place("rasa"), place("subway")),
+                listOf(place("market-street"), place("rasa")),
+            ),
+        )
+        assertEquals(listOf("rasa", "subway", "market-street"), merged.map { it.id })
+    }
+
+    @Test
+    fun placesWithoutAnIdAreMatchedByNameAndLocation() {
+        val merged = mergeNearby(listOf(listOf(place("", "Stall")), listOf(place("", "Stall"), place("", "Other"))))
+        assertEquals(listOf("Stall", "Other"), merged.map { it.name })
     }
 
     private fun org.json.JSONArray.toList(): List<Any> = (0 until length()).map { get(it) }
