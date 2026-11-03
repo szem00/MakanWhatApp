@@ -1,6 +1,22 @@
-# Eat What with What Money
+# MakanWhat?
 
-A personal fork of [BudgetAPP](https://github.com/szem00/BudgetAPP), the voice expense tracker, with one addition: a **meal finder** that answers *"what can I eat nearby with what's left?"* It installs beside the main app as `com.budgetapp.voiceexpense.personal`, with its own data.
+A personal fork of [BudgetAPP](https://github.com/szem00/BudgetAPP), the voice expense tracker (this repo is EatWhatwithWhatMoney_APP). It adds a **meal finder** that answers *"what can I eat nearby with what's left?"*, and a look of its own. It installs beside the main app as `com.budgetapp.voiceexpense.personal`, with its own data.
+
+<p>
+  <img src="docs/images/makanwhat-home.png" width="260" alt="MakanWhat? home screen in the light Kopi coin theme: $115.47 left this week in large serif type on a milky coffee card, a green progress bar, $38.49/day safe, and October's budget below">
+  &nbsp;
+  <img src="docs/images/makanwhat-home-dark.png" width="260" alt="The same home screen in the dark theme, with cream text on espresso brown and a gold Speak button">
+</p>
+
+## The Kopi coin look
+
+The app is called **MakanWhat?**, Singlish for *"eat what?"*. Its icon is a gold coin stamped with MW in slab serifs, where the W is the M turned upside down, on espresso brown.
+
+- **Fixed brand colours** replace the main app's wallpaper colours: espresso and coffee-milk browns on warm paper by day, cream and coin gold on dark roast by night. The widget uses them too.
+- **Fraunces**, a serif, sets the name, screen titles and the big amount left this week. **DM Sans** sets everything else. Both come from Google Fonts through Play services, so they add nothing to the APK. Until they've downloaded, or on a phone without Play services, the phone's own font shows instead.
+- **Budget bars** are green while you're on track, amber once 85% is gone, and red when you're over.
+
+The colours are in `ui/theme/Color.kt`, the fonts in `ui/theme/Type.kt`, and the icon in `res/drawable/ic_launcher_foreground.xml`.
 
 ## Meal finder
 
@@ -40,7 +56,7 @@ git fetch upstream
 git merge upstream/main
 ```
 
-The rest of this README is the main app's.
+The rest of this README is the main app's, so its screenshots show the main app's wallpaper colours rather than the Kopi coin look.
 
 ---
 

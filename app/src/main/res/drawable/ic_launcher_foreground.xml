@@ -1,15 +1,41 @@
+<!-- The Kopi coin: a gold coin stamped MW, on the espresso background in mipmap-anydpi-v26. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
+    <path
+        android:fillColor="#E7B24A"
+        android:pathData="M54,23a31,31 0,1 1,0 62a31,31 0,1 1,0 -62z" />
+    <path
+        android:pathData="M54,26.4a27.6,27.6 0,1 1,0 55.2a27.6,27.6 0,1 1,0 -55.2z"
+        android:strokeWidth="1.2"
+        android:strokeAlpha="0.3"
+        android:strokeColor="#2A1A10" />
+    <!-- MW in slab serifs: the W is the M turned upside down. -->
     <group
-        android:scaleX="2.5"
-        android:scaleY="2.5"
-        android:translateX="24"
-        android:translateY="24">
-        <path
-            android:fillColor="#FFFFFF"
-            android:pathData="M12,14c1.66,0 2.99,-1.34 2.99,-3L15,5c0,-1.66 -1.34,-3 -3,-3S9,3.34 9,5v6c0,1.66 1.34,3 3,3zM17.3,11c0,3 -2.54,5.1 -5.3,5.1S6.7,14 6.7,11L5,11c0,3.41 2.72,6.23 6,6.72L11,21h2v-3.28c3.28,-0.48 6,-3.3 6,-6.72h-1.7z" />
+        android:translateX="54"
+        android:translateY="54">
+        <group
+            android:scaleX="0.92"
+            android:scaleY="0.92">
+            <group
+                android:translateX="-21.8"
+                android:translateY="-10">
+                <path
+                    android:fillColor="#2A1A10"
+                    android:pathData="M0,20V0H4.6L9.5,11.6L14.4,0H19V20H15V7.6L10.9,16.8H8.1L4,7.6V20Z M-1.9,0H5.8V1.8H-1.9Z M13.2,0H20.9V1.8H13.2Z M-1.9,18.2H5.8V20H-1.9Z M13.2,18.2H20.9V20H13.2Z" />
+                <group android:translateX="24.6">
+                    <group
+                        android:pivotX="9.5"
+                        android:pivotY="10"
+                        android:rotation="180">
+                        <path
+                            android:fillColor="#2A1A10"
+                            android:pathData="M0,20V0H4.6L9.5,11.6L14.4,0H19V20H15V7.6L10.9,16.8H8.1L4,7.6V20Z M-1.9,0H5.8V1.8H-1.9Z M13.2,0H20.9V1.8H13.2Z M-1.9,18.2H5.8V20H-1.9Z M13.2,18.2H20.9V20H13.2Z" />
+                    </group>
+                </group>
+            </group>
+        </group>
     </group>
 </vector>

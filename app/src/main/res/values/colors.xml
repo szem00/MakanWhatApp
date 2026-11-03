@@ -1,5 +1,9 @@
 <resources>
-    <color name="ic_launcher_background">#0F766E</color>
+    <!-- The Kopi coin look; ui/theme/Color.kt holds the same colours for the app's screens. -->
+    <color name="ic_launcher_background">#2A1A10</color>
+
+    <!-- Shown before the first screen draws, so opening the app doesn't flash white. -->
+    <color name="window_background">#FBF4E8</color>
 
     <!-- The widget's System look, which values-night switches to the dark colours.
          Its Light and Dark looks use the suffixed colours directly, whatever the phone's mode. -->
@@ -10,17 +14,17 @@
     <color name="widget_on_accent">@color/widget_on_accent_light</color>
     <color name="widget_error">@color/widget_error_light</color>
 
-    <color name="widget_surface_light">#F7F7FA</color>
-    <color name="widget_on_surface_light">#1B1B1F</color>
-    <color name="widget_on_surface_variant_light">#46464F</color>
-    <color name="widget_accent_light">#4D5C8A</color>
+    <color name="widget_surface_light">#FBF4E8</color>
+    <color name="widget_on_surface_light">#2A1A10</color>
+    <color name="widget_on_surface_variant_light">#6E5846</color>
+    <color name="widget_accent_light">#6B4226</color>
     <color name="widget_on_accent_light">#FFFFFF</color>
     <color name="widget_error_light">#B3261E</color>
 
-    <color name="widget_surface_dark">#2A2A30</color>
-    <color name="widget_on_surface_dark">#E4E1E9</color>
-    <color name="widget_on_surface_variant_dark">#C7C5D0</color>
-    <color name="widget_accent_dark">#B6C4FF</color>
-    <color name="widget_on_accent_dark">#1E2D5C</color>
+    <color name="widget_surface_dark">#2A1A10</color>
+    <color name="widget_on_surface_dark">#F3E6D2</color>
+    <color name="widget_on_surface_variant_dark">#C4AE95</color>
+    <color name="widget_accent_dark">#E7B24A</color>
+    <color name="widget_on_accent_dark">#2A1A10</color>
     <color name="widget_error_dark">#F2B8B5</color>
 </resources>

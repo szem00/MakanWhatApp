@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Eat What with What Money</string>
+    <string name="app_name">MakanWhat?</string>
 
     <string name="back">Back</string>
     <string name="cancel">Cancel</string>
@@ -22,11 +22,14 @@
     <string name="this_week">This week</string>
     <string name="today">Today</string>
     <string name="nothing_today">Nothing logged today.</string>
-    <string name="spent">spent</string>
-    <string name="spent_of_budget">spent of %1$s</string>
+    <string name="amount_spent">%1$s spent</string>
+    <string name="spent_of_total">%1$s of %2$s</string>
     <string name="amount_left">%1$s left</string>
     <string name="amount_over">%1$s over budget</string>
     <string name="set_budget">Set a budget</string>
+    <!-- The short forms fit beside the amount spent; screen readers say the long ones. -->
+    <string name="safe_per_day_short">%1$s/day safe</string>
+    <string name="safe_today_short">%1$s safe today</string>
     <string name="safe_to_spend_per_day">Safe to spend: %1$s a day for %2$d days, including today</string>
     <string name="safe_to_spend_today">Safe to spend today: %1$s</string>
 

@@ -1,5 +1,7 @@
 <resources>
-    <style name="Theme.VoiceExpense" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.VoiceExpense" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/window_background</item>
+    </style>
 
     <style name="Theme.VoiceExpense.Overlay">
         <item name="android:windowIsTranslucent">true</item>

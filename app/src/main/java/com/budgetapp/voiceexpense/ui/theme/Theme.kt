@@ -9,14 +9,10 @@ import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.budgetapp.voiceexpense.VoiceExpenseApp
 import com.budgetapp.voiceexpense.data.ThemeMode
@@ -24,14 +20,13 @@ import com.budgetapp.voiceexpense.data.isDark
 
 @Composable
 private fun VoiceExpenseTheme(darkTheme: Boolean, content: @Composable () -> Unit) {
-    val colorScheme = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        val context = LocalContext.current
-        if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-    } else {
-        if (darkTheme) darkColorScheme() else lightColorScheme()
+    CompositionLocalProvider(LocalBrandColors provides if (darkTheme) DarkBrandColors else LightBrandColors) {
+        MaterialTheme(
+            colorScheme = if (darkTheme) KopiDark else KopiLight,
+            typography = KopiTypography,
+            content = content,
+        )
     }
-    // Samsung's palette makes these two differ, which shows list rows as bands on the page.
-    MaterialTheme(colorScheme = colorScheme.copy(background = colorScheme.surface), content = content)
 }
 
 /**
@@ -53,9 +48,10 @@ fun AppTheme(activity: ComponentActivity, content: @Composable () -> Unit) {
     VoiceExpenseTheme(darkTheme, content)
 }
 
-// The scrims enableEdgeToEdge() uses by default, for 3-button navigation.
-private val LIGHT_SCRIM = Color.argb(0xe6, 0xFF, 0xFF, 0xFF)
-private val DARK_SCRIM = Color.argb(0x80, 0x1b, 0x1b, 0x1b)
+// As see-through as the scrims enableEdgeToEdge() uses by default for 3-button navigation, in the
+// theme's surface colours.
+private val LIGHT_SCRIM = Color.argb(0xe6, 0xFB, 0xF4, 0xE8)
+private val DARK_SCRIM = Color.argb(0x80, 0x1A, 0x11, 0x0B)
 
 /**
  * From Android 12, hands the choice to the system, which applies it to the whole app: the splash

@@ -1,0 +1,37 @@
+<!-- The coin as an outline, for launchers that tint icons to match the wallpaper. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:pathData="M54,24.5a29.5,29.5 0,1 1,0 59a29.5,29.5 0,1 1,0 -59z"
+        android:strokeWidth="3"
+        android:strokeColor="#FFFFFF" />
+    <!-- MW in slab serifs: the W is the M turned upside down. -->
+    <group
+        android:translateX="54"
+        android:translateY="54">
+        <group
+            android:scaleX="0.92"
+            android:scaleY="0.92">
+            <group
+                android:translateX="-21.8"
+                android:translateY="-10">
+                <path
+                    android:fillColor="#FFFFFF"
+                    android:pathData="M0,20V0H4.6L9.5,11.6L14.4,0H19V20H15V7.6L10.9,16.8H8.1L4,7.6V20Z M-1.9,0H5.8V1.8H-1.9Z M13.2,0H20.9V1.8H13.2Z M-1.9,18.2H5.8V20H-1.9Z M13.2,18.2H20.9V20H13.2Z" />
+                <group android:translateX="24.6">
+                    <group
+                        android:pivotX="9.5"
+                        android:pivotY="10"
+                        android:rotation="180">
+                        <path
+                            android:fillColor="#FFFFFF"
+                            android:pathData="M0,20V0H4.6L9.5,11.6L14.4,0H19V20H15V7.6L10.9,16.8H8.1L4,7.6V20Z M-1.9,0H5.8V1.8H-1.9Z M13.2,0H20.9V1.8H13.2Z M-1.9,18.2H5.8V20H-1.9Z M13.2,18.2H20.9V20H13.2Z" />
+                    </group>
+                </group>
+            </group>
+        </group>
+    </group>
+</vector>

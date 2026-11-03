@@ -39,6 +39,15 @@ class BudgetCalcTest {
     }
 
     @Test
+    fun budgetIsNearlyUsedFrom85PercentUntilItGoesOver() {
+        assertFalse(PeriodSummary(spentCents = 8_499, budgetCents = 10_000).isNearlyUsed)
+        assertTrue(PeriodSummary(spentCents = 8_500, budgetCents = 10_000).isNearlyUsed)
+        assertTrue(PeriodSummary(spentCents = 10_000, budgetCents = 10_000).isNearlyUsed)
+        assertFalse(PeriodSummary(spentCents = 10_001, budgetCents = 10_000).isNearlyUsed)
+        assertFalse(PeriodSummary(spentCents = 50_000, budgetCents = null).isNearlyUsed)
+    }
+
+    @Test
     fun safeToSpendSplitsRemainingAndRoundsDown() {
         assertEquals(1_880L, safeToSpendPerDayCents(9_400, 5))
         assertEquals(333L, safeToSpendPerDayCents(1_000, 3))

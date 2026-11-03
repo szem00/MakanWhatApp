@@ -201,10 +201,10 @@ class AppFlowTest {
         setBudgets(weekly = "100", monthly = "400")
 
         waitFor("$94.00 left")
-        waitFor("Safe to spend: $18.80 a day for 5 days, including today")
+        waitFor("$18.80/day safe")
         waitFor("$394.00 left")
-        waitFor("spent of $100.00")
-        waitFor("spent of $400.00")
+        waitFor("$6.00 of $100.00")
+        waitFor("$6.00 of $400.00")
     }
 
     @Test
@@ -212,11 +212,11 @@ class AppFlowTest {
         launch()
         waitFor("Nothing logged today.")
         setBudgets(weekly = "100", monthly = "400")
-        waitFor("Safe to spend", substring = true)
+        waitFor("/day safe", substring = true)
 
         addExpense("106")
         waitFor("$6.00 over budget")
-        compose.onNodeWithText("Safe to spend", substring = true).assertDoesNotExist()
+        compose.onNodeWithText("/day safe", substring = true).assertDoesNotExist()
     }
 
     @Test

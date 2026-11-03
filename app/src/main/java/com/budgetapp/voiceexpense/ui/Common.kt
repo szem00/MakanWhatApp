@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.budgetapp.voiceexpense.R
@@ -25,6 +26,7 @@ import com.budgetapp.voiceexpense.data.Category
 import com.budgetapp.voiceexpense.data.Expense
 import com.budgetapp.voiceexpense.domain.DateRange
 import com.budgetapp.voiceexpense.domain.formatMoney
+import com.budgetapp.voiceexpense.ui.theme.TABULAR_FIGURES
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -90,7 +92,9 @@ fun ExpenseRow(expense: Expense, zone: ZoneId, onClick: () -> Unit) {
     val time = expense.timestamp.atZone(zone).format(rememberTimeFormatter())
     ListItem(
         modifier = Modifier.clickable(onClick = onClick),
-        headlineContent = { Text(stringResource(expense.category.labelRes())) },
+        headlineContent = {
+            Text(stringResource(expense.category.labelRes()), fontWeight = FontWeight.Bold)
+        },
         supportingContent = {
             Text(
                 text = if (expense.note.isBlank()) time else "${expense.note} · $time",
@@ -99,7 +103,13 @@ fun ExpenseRow(expense: Expense, zone: ZoneId, onClick: () -> Unit) {
             )
         },
         trailingContent = {
-            Text(formatMoney(expense.amountCents), style = MaterialTheme.typography.titleMedium)
+            Text(
+                text = formatMoney(expense.amountCents),
+                style = MaterialTheme.typography.titleMedium.copy(
+                    fontWeight = FontWeight.ExtraBold,
+                    fontFeatureSettings = TABULAR_FIGURES,
+                ),
+            )
         },
     )
 }
