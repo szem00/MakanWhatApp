@@ -1,6 +1,6 @@
 # MakanWhat?
 
-A personal fork of [BudgetAPP](https://github.com/szem00/BudgetAPP), the voice expense tracker (this repo is EatWhatwithWhatMoney_APP). It adds a **meal finder** that answers *"what can I eat nearby with what's left?"*, and a look of its own. It installs beside the main app as `com.budgetapp.voiceexpense.personal`, with its own data.
+A personal fork of [BudgetAPP](https://github.com/szem00/BudgetAPP), the voice expense tracker (this repo is MakanWhatApp). It adds a **meal finder** that answers *"what can I eat nearby with what's left?"*, and a look of its own. It installs beside the main app as `com.budgetapp.voiceexpense.personal`, with its own data.
 
 <p>
   <img src="docs/images/makanwhat-home.png" width="260" alt="MakanWhat? home screen in the light Kopi coin theme: $115.47 left this week in large serif type on a milky coffee card, a green progress bar, $38.49/day safe, and October's budget below">
