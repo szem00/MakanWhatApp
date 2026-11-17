@@ -1,0 +1,68 @@
+# Pushing a tag like v0.5.1 builds a signed APK and publishes it as a GitHub release.
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          # The release notes list the commits since the previous tag.
+          fetch-depth: 0
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 25
+          cache: gradle
+
+      - name: Check the tag matches the app's version
+        run: |
+          version=$(sed -n 's/^ *versionName = "\(.*\)"$/\1/p' app/build.gradle.kts)
+          if [ "v$version" != "$GITHUB_REF_NAME" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME doesn't match versionName \"$version\" in app/build.gradle.kts."
+            exit 1
+          fi
+
+      - name: Unpack the signing key
+        env:
+          KEYSTORE: ${{ secrets.RELEASE_KEYSTORE_BASE64 }}
+          PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}
+        run: |
+          if [ -z "$KEYSTORE" ] || [ -z "$PASSWORD" ]; then
+            echo "::error::Add the RELEASE_KEYSTORE_BASE64 and RELEASE_STORE_PASSWORD secrets first. The README's \"Making a release\" section says how."
+            exit 1
+          fi
+          echo "$KEYSTORE" | base64 --decode > "$RUNNER_TEMP/release.jks"
+          echo "RELEASE_STORE_FILE=$RUNNER_TEMP/release.jks" >> "$GITHUB_ENV"
+
+      - name: Test and build
+        env:
+          RELEASE_STORE_PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}
+        run: ./gradlew :app:testDebugUnitTest :app:assembleRelease
+
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          apk="MakanWhat-$version.apk"
+          cp app/build/outputs/apk/release/app-release.apk "$apk"
+          previous=$(git describe --tags --abbrev=0 "$GITHUB_REF_NAME^" 2>/dev/null || true)
+          {
+            echo "Download **$apk** on an Android phone (Android 8 or newer) and open it to install. Your browser may ask you to allow installing apps first."
+            echo
+            echo "This build doesn't search Google Maps, so the meal finder lists only places you've logged yourself."
+            echo
+            echo "## Changes"
+            echo
+            git log --no-merges --format='- %s' "${previous:+$previous..}$GITHUB_REF_NAME"
+          } > notes.md
+          gh release create "$GITHUB_REF_NAME" "$apk" --title "MakanWhat? $version" --notes-file notes.md

@@ -143,7 +143,7 @@
         <item quantity="other">%d visits</item>
     </plurals>
     <string name="meal_finder_nearby">Nearby on Google Maps</string>
-    <string name="meal_finder_no_key">Add PLACES_API_KEY to local.properties to search Google Maps.</string>
+    <string name="meal_finder_no_key">This build doesn\'t search Google Maps, so only your own places show.</string>
     <string name="meal_finder_searching">Searching Google Maps…</string>
     <string name="meal_finder_search_failed">Couldn\'t search Google Maps. %1$s</string>
     <string name="meal_finder_nothing_nearby">No restaurants or food courts within 2 km.</string>

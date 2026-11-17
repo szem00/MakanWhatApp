@@ -187,13 +187,13 @@ class MealFinderFlowTest {
     }
 
     @Test
-    fun withoutAnApiKeyItSaysHowToAddOne() {
+    fun withoutAnApiKeyItShowsOnlyYourOwnPlaces() {
         useGoogle(null)
         seedBudget()
         seedMeals()
         openMealFinder()
 
-        waitFor("Add PLACES_API_KEY to local.properties to search Google Maps.")
+        waitFor("This build doesn't search Google Maps, so only your own places show.")
         waitFor("Fishball noodles")
     }
 

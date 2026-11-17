@@ -45,11 +45,34 @@ android {
         // A separate app ID installs beside the main app instead of replacing it.
         applicationIdSuffix = ".personal"
         versionNameSuffix = "-personal"
-        buildConfigField(
-            "String",
-            "PLACES_API_KEY",
-            "\"${localProperties.getProperty("PLACES_API_KEY", "")}\"",
-        )
+    }
+
+    // GitHub signs releases with the key kept in the repo's secrets. See .github/workflows/release.yml.
+    signingConfigs {
+        System.getenv("RELEASE_STORE_FILE")?.let { path ->
+            create("release") {
+                storeFile = file(path)
+                storePassword = System.getenv("RELEASE_STORE_PASSWORD")
+                keyAlias = "makanwhat"
+                // keytool's PKCS12 keystores protect the key with the store's password.
+                keyPassword = storePassword
+            }
+        }
+    }
+
+    buildTypes {
+        debug {
+            buildConfigField(
+                "String",
+                "PLACES_API_KEY",
+                "\"${localProperties.getProperty("PLACES_API_KEY", "")}\"",
+            )
+        }
+        release {
+            signingConfig = signingConfigs.findByName("release")
+            // Anyone can read strings out of a published APK, so releases never carry the key.
+            buildConfigField("String", "PLACES_API_KEY", "\"\"")
+        }
     }
 
     buildFeatures {

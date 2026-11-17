@@ -8,6 +8,12 @@ A personal fork of [BudgetAPP](https://github.com/szem00/BudgetAPP), the voice e
   <img src="docs/images/makanwhat-home-dark.png" width="260" alt="The same home screen in the dark theme, with cream text on espresso brown and a gold Speak button">
 </p>
 
+## Install
+
+On an Android phone running Android 8 or newer, download the APK from the [latest release](https://github.com/szem00/MakanWhatApp/releases/latest) and open it. Your browser may ask you to allow installing apps first.
+
+Releases don't include a Google Places API key, so their meal finder lists only the places you've logged yourself. For Google Maps results, build the app with your own key, as described in [Setting up the Places API key](#setting-up-the-places-api-key).
+
 ## The Kopi coin look
 
 The app is called **MakanWhat?**, Singlish for *"eat what?"*. Its icon is a gold coin stamped with MW in slab serifs, where the W is the M turned upside down, on espresso brown.
@@ -47,6 +53,8 @@ Without a key, the meal finder still shows your own places.
    PLACES_API_KEY=your-key-here
    ```
 
+   Only debug builds use it. Release builds always leave it out, because anyone can read strings out of a published APK.
+
 ### Keeping up with the main app
 
 The main repo is the `upstream` remote, set to fetch only so nothing here can be pushed to it by mistake. To bring in its latest changes:
@@ -55,6 +63,35 @@ The main repo is the `upstream` remote, set to fetch only so nothing here can be
 git fetch upstream
 git merge upstream/main
 ```
+
+## Making a release
+
+Pushing a version tag runs `.github/workflows/release.yml`. It checks the tag matches the app's version, runs the unit tests, builds a release APK signed with the release key, and publishes it as a GitHub release, with the commits since the last tag as its notes.
+
+**Once:** create the release key and give GitHub a copy.
+
+1. Create the key, outside the project folder. `keytool` comes with any JDK, including Android Studio's `jbr\bin`. It asks for a password.
+
+   ```powershell
+   keytool -genkeypair -keystore "$env:USERPROFILE\keys\makanwhat-release.jks" -alias makanwhat -keyalg RSA -keysize 4096 -validity 10000 -dname "CN=MakanWhat"
+   ```
+
+2. Back up the `.jks` file and its password somewhere safe. If they're lost, later releases can't update copies already installed.
+3. Add them to the repo's Actions secrets. The second command asks for the password.
+
+   ```powershell
+   [Convert]::ToBase64String([IO.File]::ReadAllBytes("$env:USERPROFILE\keys\makanwhat-release.jks")) | gh secret set RELEASE_KEYSTORE_BASE64 -R szem00/MakanWhatApp
+   gh secret set RELEASE_STORE_PASSWORD -R szem00/MakanWhatApp
+   ```
+
+**Each release:** raise `versionCode` and `versionName` in `app/build.gradle.kts`, commit and push, then tag that version:
+
+```powershell
+git tag v0.5.2
+git push origin v0.5.2
+```
+
+Releases and debug builds are signed with different keys, so a phone with a debug build from `adb install` can't update to a release. Installing a release there means uninstalling first, which deletes the app's data.
 
 The rest of this README is the main app's, so its screenshots show the main app's wallpaper colours rather than the Kopi coin look.
 
